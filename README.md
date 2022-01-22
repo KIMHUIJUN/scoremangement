@@ -33,9 +33,10 @@
 * 해당 데이터를 csv로 저장하며 저장할 파일의 이름을 입력받는다.
 * 다음에 프로그램을 실행시 저장된 파일을 자동으로 불러온다.
 
-### 2. 기능별 코드 설명
+### 2. 기능별 설명
 
 * 전에 사용했던 데이터 불러오기
+프로그램 시작시 자동으로 전에 입력한 데이터를 불러온다
 <pre>
 <code>
   f = open('./num.txt', 'r') #csv 파일 이름이 저장되어 있는 num.txt 파일을 읽어 온다/
@@ -57,296 +58,94 @@
 </code>
 </pre>
 
-* 메인 화면 출력
 
-<pre>
-<code>
-  print('===================================')
-  print('==피식 고등학교 성적처리 프로그램==')
-  print('===================================')
-  print('<<메뉴>>')
-  print('1. 성적입력')
-  print('2. 성적현황')
-  print('3. 성적수정')
-  print('4. 종료')
-  print('===================================')
-  num_menu = input(">>>")
-  print('===================================')
-</code>
-</pre>
-
+* 메인 화면
+ 
+![cap1](https://user-images.githubusercontent.com/91679614/150639662-4f7f902b-2418-47cf-9ce3-5c86052982c8.PNG)
 
 * 학번 입력 예외 처리
 
-<pre>
-<code>
-if num_menu == '1':
-    print('학생 성적 입력')
-    print('===================================')
-    
-    #학번입력 예외처리 부분 
-    try:
-   
-      st_num = str(input('학번:')) # 학번 입력받기
-      st_num = int(st_num )       
-   
-    except ValueError   as e:  # 학번이 정수인지 확인 
-      print('{}는 입력할 수 없습니다.'.format(st_num))
-      continue
-      
-    else:
-   
-      i = []
-      for a in range(len(df.index)): # 학번이 중복인지 확인 
-        p = df.index[a] 
-        i.append(p)
+메인화면에서 1 을 선택하면 아래 화면처럼 학번을 입력할 수 있는 창이 뜬다
 
-      if st_num <= 0: # 학번이 양수인지 확인 
-        print('{}는 입력할 수 없습니다.'.format(st_num))
-        continue
-   
-      elif st_num in i : # 학번이 정수인지 확인 
-        print('{}은(는)성적이 존재하는 학생입니다.'.format(st_num))
-        continue
-</code>
-</pre>
+![cap2](https://user-images.githubusercontent.com/91679614/150639775-066db5de-d76d-4357-8c84-c23a768f909c.PNG)
+
+학번에 문자열을 치면 입력할 수 없다는 메세지와 함께 매인화면으로 돌아간다
+
+![cap3](https://user-images.githubusercontent.com/91679614/150639779-7aaca5f5-f049-459d-86df-3f3141b9f728.PNG)
+
+학번에 0 이하의 수를 입력해도 입력할수 없다는 메세지와 함께 메인 화면으로 돌아간다
+
+![cap4](https://user-images.githubusercontent.com/91679614/150639781-ea0c5f9e-9c69-4a67-b9a5-6d4c481f6ac8.PNG)
+
+이미 있는 학번을 입력하면 존재하는 학번은 입력할 수 없다는 메세지와 함께 메인 화면으로 돌아간다
+
+![cap8](https://user-images.githubusercontent.com/91679614/150640121-04a5550e-1197-46b3-8e3c-d23a8538e9aa.PNG)
 
 *과목별 성적 입력 코드
 
-<pre>
-<code>
+![cap5](https://user-images.githubusercontent.com/91679614/150639782-39fcf126-34fc-4cec-a362-920413f8d1f1.PNG)
 
-  #국어 입력
-    while True:
-  
+과목별 성적에 0~100 까지 정수가 아닌 다른것을 입력하면 해당과목의 점수를 다시 입력받는다.
 
-      try:
-        st_num_kor = str(input('{}의 국어 점수: '.format(st_num)))
-        st_num_kor = int(st_num_kor)
-      
-      except ValueError as e:
-        print('정수 0~100를 입력하시오')
-        
-      else:
-        if st_num_kor <= 0:
-          print('정수 0~100를 입력하시오')
-          
-        elif st_num_kor > 100 :
-          print('정수 0~100를 입력하시오')
-
-        else:
-          break
-</code>
-</pre>
+![cap9](https://user-images.githubusercontent.com/91679614/150640227-eafb8ddd-b7cf-4930-8208-6ade53dceaf1.PNG)
 
 * 저장여부 확인 후 저장
 
-<pre>
-<code>
-    #저장 여부
-    y_or_n = input('{}의 점수를 저장하시겠습니까(y/n)?'.format(st_num))
-    
-    if y_or_n == 'n':
-      print('학생({})의 점수가 저장되지않았습니다.'.format(st_num))
-      
-    elif y_or_n == 'y':
-     
-      df2 = pd.Series([st_num_kor, st_num_eng, st_num_math])
-      b = int(df2.sum())
-      c = float(df2.mean())
-      c = round(c,2)
-      
-      if c >=90:
-        df.loc[len(df.index)] = [st_num,st_num_kor, st_num_eng, st_num_math,b,c,'A']
-      elif 90> c >=80:
-        df.loc[len(df.index)] = [st_num,st_num_kor, st_num_eng, st_num_math,b,c,'B']
-      elif 80 > c >=70:
-        df.loc[len(df.index)] = [st_num,st_num_kor, st_num_eng, st_num_math,b,c,'C']
-      elif 70 > c >=60:
-        df.loc[len(df.index)] = [st_num,st_num_kor, st_num_eng, st_num_math,b,c,'D']
-      elif 60 > c :
-        df.loc[len(df.index)] = [st_num,st_num_kor, st_num_eng, st_num_math,b,c,'F']
-      
-      print('학생 ({})의 점수 합계는 {}점, 평균은 {:.2f} 입니다.'.format(st_num,b ,c ))  
-      
-      df.index = df['번호']
-      df =df.sort_index()
-</code>
-</pre>
+저장을 하지않을시 메세지 출력과 함꼐 메인화면으로 돌아간다
+
+![cap10](https://user-images.githubusercontent.com/91679614/150640278-bea9ba8e-a39b-4c3f-b858-23573ad67e0f.PNG)
+
+저장시 총합 과 평균 값 출력후 메인화면으로 돌아간다
+
+![cap6](https://user-images.githubusercontent.com/91679614/150639830-a96ed74b-5a98-4246-8fca-76632aa06e8e.PNG)
 
 *성적 현황 출력
 
-<pre>
-<code>
-  elif num_menu == '2':
-    df.index = df['번호']
-    df = df.sort_index()
-    print('-------------------------------------------------------------------------')
-    print('{:<22}{:<6}{:<7}{:<6}{:<7}{:<7}{:<8}'.format('번호', '국어', '영어', '수학','총합', '평균','환산'))
-    print('-------------------------------------------------------------------------')
-    for in_dex in range(len(df.index)):
-      for col in range(len(df.columns)):
-        
-        if col == 5 :
-          a = ('{:.2f}'.format(df.iat[in_dex,col]))
-          print('{:<10}'.format(a), end='')
+메인 화면에서 2를 입력하면 아래 이미지 와 같이 성적 현황이 출력된다.
 
-        elif col == 6 :
-          a = df.iat[in_dex,col]
-          print('{:<8}'.format(a)  )
-        elif col == 0:
-          print('{:<20}      '.format(df.iat[in_dex,col]),end='')
-        else:
-          print('{:<9}'.format(df.iat[in_dex,col]),end='')
-</code>
-</pre>
-            
+![cap7](https://user-images.githubusercontent.com/91679614/150639904-62ca86bb-9fa7-4579-b677-90eaf69052c9.PNG)
+
 * 성적 수정/ 삭제 학생 입력 후 정보확인
-<pre>
-<code>
- elif num_menu == '3':
-    
-    try:
-   
-      del_num = input('수정할 학생 번호 :') # 학번 입력받기
-      del_num = int(del_num )       
-   
-    except ValueError   as e:  # 학번이 정수인지 확인 
-      print('{}는  없습니다.'.format(del_num))
-      continue
-      
-    else:
-      
-      if del_num <= 0: # 학번이 양수인지 확인 
-        print('{}는 입력할 수 없습니다.'.format(del_num))
-        continue
-      elif del_num > 0:
-        i = []
-        for a in range(len(df.index)): # 학번이 중복인지 확인 
-         p = df.index[a] 
-         i.append(p)
-     
-        if del_num not in i : # 학번이 중복인지 확인 
-            print('{}은(는)성적이 존재하지않는 학생입니다.'.format(del_num))
-            continue   
-    print('-------------------------------------------------------------------------')
-    print('{:<22}{:<6}{:<6}{:<5}{:<6}{:<7}{:<8}'.format('번호', '국어', '영어', '수학','총합', '평균','환산'))
-    print('-------------------------------------------------------------------------')
-    df2 = df.loc[[del_num]]
-    del_in = df2.index
-    del_in = del_in[0]
-    for col in range(len(df2.columns)):
-      del_i = 0
-      if col == 5 :
-        a = ('{:.2f}'.format(df2.iat[del_i,col]))
-        print('{:<10}'.format(a), end='')
+메인화면에서 3을 입력하면 수정할 학생의 학번을 입력하는 창이 나온다
 
-      elif col == 6 :
-        a = df2.iat[del_i,col]
-        print('{:<8}'.format(a)  )
-      elif col == 0:
-        print('{:<20}      '.format(df2.iat[del_i,col]),end='')
-      else:
-        print('{:<8}'.format(df2.iat[del_i,col]),end='')    
-    print('-------------------------------------------------------------------------')
-</code>
-</pre>
+저장되지 않은 학번 입력시 존재하지 않는다는 메세지와 함께 메인 화면으로 돌아간다
+
+![cap11](https://user-images.githubusercontent.com/91679614/150640400-c757b8a5-c6bb-4fb7-b32d-b44e94309246.PNG)
+
+수정할 학번 입력란에 문자열을 입력해도 존재하지 않는다는 메세지와 함께 메인 화면으로 돌아간다
+
+![cap12](https://user-images.githubusercontent.com/91679614/150640401-feddcb71-0484-40ae-b826-a48407987b98.PNG)
+
+존재 하는 학번을 입력시에 학생의 정보를 출력하며  찾는 학생이 맞는지의 여부를 입력창이 나온다
+
+![cap13](https://user-images.githubusercontent.com/91679614/150640403-3db974f2-81d3-49fd-9e8c-f757e7768505.PNG)
       
 * 학생 일치 여부 및 수정/ 삭제 여부 
-<pre>
-<code>
-y_or_n = input('위 정보가 맞습니까?(y/n):')
-    if y_or_n == 'n':
-      continue
-    elif y_or_n == 'y':
-      print('(1)수정  (2)삭제') 
-      del_or_rep = input('>>>') 
-</pre>
-</code>
+
+일치 여부 에서 n 을 입력하면 메인화면으로 돌아간다
+
+![cap14](https://user-images.githubusercontent.com/91679614/150640570-e7cc4046-fe62-4427-a23f-a3089546ccd2.PNG)
+
+일치 여부에서 y 를 입력하면 수정 삭제 여부를 물어본다
+![cap15](https://user-images.githubusercontent.com/91679614/150640571-9421e6e7-f87c-4634-ac36-72ac435f4318.PNG)
 
 * 성적 삭제
-<pre>
-<code>
-      if del_or_rep =='2':
-        df = df.drop(del_in)#특정 열 삭제
-        print('{}의 성적 기록이 삭제 되었습니다.'.format(del_num))
-        df.index = df['번호']
-        df = df.sort_index()
-        continue
-</pre>
-</code>
+
+삭제를 선택하면 삭제 되었다는 메세지와 함께 메인 화면으로 돌아간다.
+![cap16](https://user-images.githubusercontent.com/91679614/150640637-9c1129a8-41e4-4f50-b1c3-7a3595fa28ad.PNG)
+
 
 *성적 수정시 수정 성적 입력
-<pre>
-<code>
-      elif del_or_rep == '1':
-      
-        while True:
-        
-          try:
-            st_num_kor = input('국어 (기존점수:{}) >'.format(df.at[del_in,'국어']))
-            st_num_kor = int(st_num_kor)
-          
-          except ValueError as e:
-            st_num_kor = df2.iat[0,1]
-            break
-          else:
-            if st_num_kor <= 0:
-              print('정수 0~100를 입력하시오a')
-              
-            elif st_num_kor > 100 :
-              print('정수 0~100를 입력하시오a')
 
-</code>
-</pre>
+수정을 선택 하면 수정 할 점수를 입력 받을 수 있으며 enter를 쳐 넘어가면 해당점수는 기존의 점수로 입력받는다.
+그후 저장 유무를 입력 받는다
 
-* 수정 성적 저장 여부 확인 후 저장
-<pre>
-<code>
+![cap17](https://user-images.githubusercontent.com/91679614/150640691-b424b8d0-6bc4-4dd1-9d93-98ed99b18fe9.PNG)
 
-        yes_or_no = input('위 내용대로 수정 하시겠습니까? (y/n): ')
-        if yes_or_no == 'n':
-          continue
-        elif yes_or_no == 'y':
-          df3 = pd.Series([st_num_kor, st_num_eng, st_num_math])
-          b = int(df3.sum())
-          c = float(df3.mean())
-          c = round(c,2)
-          
-          if c >=90:
-            df.loc[del_in] = [del_num,st_num_kor, st_num_eng, st_num_math,b,c,'A']
-            
-          elif 90> c >=80:
-            df.loc[del_in] = [del_num,st_num_kor, st_num_eng, st_num_math,b,c,'B']
-            
-          elif 80 > c >=70:
-            df.loc[del_in] = [del_num,st_num_kor, st_num_eng, st_num_math,b,c,'C']
-            
-          elif 70 > c >=60:
-            df.loc[del_in] = [del_num,st_num_kor, st_num_eng, st_num_math,b,c,'D']
-            
-          elif 60 > c :
-            df.loc[del_in] = [del_num,st_num_kor, st_num_eng, st_num_math,b,c,'F']
-          
-          
-          df.index = df['번호']  
-          df = df.sort_index()
-          continue        
-</code>
-</pre>
 
 * 프로그램 종료, 파일저장
-<pre>
-<code>
-  elif num_menu == '4':
-    
-    a=input('파일이름을 입력하시오:')
-    df.to_csv('C:\kim\\{}.csv'.format(a), mode='w',index=False)
-    
-    with open ('num.txt', 'w',encoding= ' UTF-8') as f:
-      f.write(a+"\n")
 
+메인 화면에서 4를 입력 받으면 해당 데이터를 csv로 저장하는데 csv 파일 이름을 입력받고 프로그램을 종료한다
 
-    break
-</code>
-</pre>
+![capfi](https://user-images.githubusercontent.com/91679614/150640774-a88771db-4eac-4e0f-ad42-1d7f0f155bb8.PNG)
+
